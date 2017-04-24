@@ -1,46 +1,130 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-var app = {
-    // Application Constructor
-    initialize: function() {
-        document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
-    },
 
-    // deviceready Event Handler
-    //
-    // Bind any cordova events here. Common events are:
-    // 'pause', 'resume', etc.
-    onDeviceReady: function() {
-        this.receivedEvent('deviceready');
-    },
+COURSE: MAD9022 App Dev II
+PROJECT: Secret Messenger
+AUTHORS: Pair 11
+DATE: Monday, April 24 2017
 
-    // Update DOM on a Received Event
-    receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
+*/
 
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
+var app = null;
+var loginPage = null;
 
-        console.log('Received Event: ' + id);
+//=========================================================
+
+app = (function(){
+    'use strict';
+    var app =  {};
+
+    /* ---------------------------------------------------- */       
+    document.addEventListener('deviceready', onDeviceReady);
+    
+    function onDeviceReady(ev) {
+        window.addEventListener('push', onRatchetPush);        
+
+        app.messageList = document.getElementById("messageList");
+        
+        
+        loginPage.makePage();
     }
-};
+    
+    function onRatchetPush(ev){        
+        
+        let content = document.querySelector('.content');
+        console.log('push', content.id);
+        
+        //        switch(content.id){
+        //            case 'listPeople':                
+        //                people.makePage()
+        //                break;
+        //            case 'listGifts':
+        //                gifts.makePage();
+        //                break;
+        //        };
+    }
 
-app.initialize();
+    return app;
+})();
+
+//=========================================================
+
+loginPage = (function(){
+    'use strict';
+    var module = {};
+    
+    var unIn = null;
+    var emIn = null;
+    var lgBtn = null;
+    var rgBtn = null;
+
+    // for testing purposes only
+    var userName = "gordi";
+    var userEmail = "kerr0215@algonquincollege.com"
+    //
+
+    module.clickLg = function(ev){
+        ev.preventDefault();
+
+        var url = "http://griffis.edumedia.ca/mad9022/steg/login.php";
+        var formData = new FormData();
+        formData.append("user_name", unIn.value);
+        formData.append("email", emIn.value);
+        var request = new Request(url, {method: "POST", mode: "cors", body: formData,});
+
+        fetch(request)
+            .then(function(response){
+                return response.json();
+            })
+            .then(function(data){
+                console.log(data);
+                app.messageList.classList.add("active");
+            })
+            .catch(function(err){
+                alert(err.message);
+            });
+    }
+    
+    module.clickRg = function(ev){
+        ev.preventDefault();
+        //        var messageList = document.getElementById("messageList");
+        //        messageList.classList.add("active");
+
+        var url = "http://griffis.edumedia.ca/mad9022/steg/register.php";
+        var formData = new FormData();
+        formData.append("user_name", unIn.value);
+        formData.append("email", emIn.value);
+        var request = new Request(url, {method: "POST", mode: "cors", body: formData,});
+
+        fetch(request)
+            .then(function(response){
+                return response.json();
+            })
+            .then(function(data){
+                console.log(data);
+            })
+            .catch(function(err){
+                alert(err.message);
+            });
+        
+        
+    }
+    
+    module.makePage = function(){
+        console.log("making login page.");
+        unIn = document.getElementById("unIn");
+        emIn = document.getElementById("emIn");
+
+        // for testing only
+        unIn.value = userName;
+        emIn.value = userEmail;
+        //
+        
+        lgBtn = document.getElementById("lgBtn");
+        lgBtn.addEventListener("click", module.clickLg);
+        rgBtn = document.getElementById("rgBtn");
+        rgBtn.addEventListener("click", module.clickRg);
+        
+    }
+
+    return module;
+})();
