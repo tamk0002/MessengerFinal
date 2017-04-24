@@ -16,35 +16,33 @@ app = (function(){
     'use strict';
     var app =  {};
 
-    /* ---------------------------------------------------- */       
-    document.addEventListener('deviceready', onDeviceReady);
+    app.user_id = -1;
+    app.user_guid = -1;
     
+    /* ---------------------------------------------------- */       
+    
+    document.addEventListener('deviceready', onDeviceReady);    
     function onDeviceReady(ev) {
-        window.addEventListener('push', onRatchetPush);        
 
-        app.messageList = document.getElementById("messageList");
-        
+        app.messageList = document.getElementById("messageList");        
         
         loginPage.makePage();
     }
-    
-    function onRatchetPush(ev){        
-        
-        let content = document.querySelector('.content');
-        console.log('push', content.id);
-        
-        //        switch(content.id){
-        //            case 'listPeople':                
-        //                people.makePage()
-        //                break;
-        //            case 'listGifts':
-        //                gifts.makePage();
-        //                break;
-        //        };
-    }
 
+    /* ---------------------------------------------------- */       
+    
+    
+    
     return app;
 })();
+
+
+
+
+
+
+
+
 
 //=========================================================
 
@@ -76,8 +74,21 @@ loginPage = (function(){
                 return response.json();
             })
             .then(function(data){
-                console.log(data);
-                app.messageList.classList.add("active");
+            
+            
+                // this code path
+                
+                app.user_id = data.user_id;
+                app.user_guid = data.user_guid;
+            
+                messageList.makePage();
+            
+                //
+                        
+                s = "code: "+data.code;
+                console.log(s);
+                
+                
             })
             .catch(function(err){
                 alert(err.message);
@@ -86,8 +97,6 @@ loginPage = (function(){
     
     module.clickRg = function(ev){
         ev.preventDefault();
-        //        var messageList = document.getElementById("messageList");
-        //        messageList.classList.add("active");
 
         var url = "http://griffis.edumedia.ca/mad9022/steg/register.php";
         var formData = new FormData();
@@ -110,7 +119,7 @@ loginPage = (function(){
     }
     
     module.makePage = function(){
-        console.log("making login page.");
+        //console.log("making login page.");
         unIn = document.getElementById("unIn");
         emIn = document.getElementById("emIn");
 
@@ -124,6 +133,57 @@ loginPage = (function(){
         rgBtn = document.getElementById("rgBtn");
         rgBtn.addEventListener("click", module.clickRg);
         
+    }
+
+    return module;
+})();
+
+
+
+
+
+
+
+
+//=========================================================
+
+messageList = (function(){
+    'use strict';
+    var module = {};
+    
+    module.makePage = function(){
+        
+        // switch on modal
+        app.messageList.classList.add("active");
+        
+        //"name": "listMessages",
+        //"endpoint": "msg-list.php",
+        //"desc": "get the list of messages for a user from the queue. User must be logged in",
+        //"requires": ["user_id", "user_guid"]
+        
+        var url = "http://griffis.edumedia.ca/mad9022/steg/msg-list.php";
+        var formData = new FormData();
+
+        formData.append("user_id", app.user_id);
+        formData.append("user_guid", app.user_guid);
+
+        var request = new Request(url, {method: "POST", mode: "cors", body: formData,});
+        fetch(request)
+            .then(function(response){
+                return response.json();
+            })
+            .then(function(data){
+
+            // this code path
+                console.log(data);
+                //    module.clickLg = function(ev){
+                //        ev.preventDefault();
+            
+            })
+            .catch(function(err){
+                alert(err.message);
+            });
+
     }
 
     return module;
