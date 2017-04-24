@@ -50,7 +50,7 @@
     <div id="messageList" class="modal">
        
         <header class="bar bar-nav">
-            <a id="createBtn" class="icon icon-compose pull-right" href="#messageSend"></a>
+            <a id="createBtn" class="icon icon-compose pull-right"></a>
             <h1 class="title">Inbox</h1>
         </header>
         
@@ -72,7 +72,7 @@
        
         <header class="bar bar-nav">
             <span class="icon icon-left-nav pull-left" href="#messageList">Back</span>
-            <a id="createBtn" class="icon icon-compose pull-right" href="#messageSend"></a>
+            <!--            <a id="createBtn" class="icon icon-compose pull-right" href="#messageSend"></a>-->
             <h1 class="title"></h1>
         </header>
 
@@ -98,7 +98,7 @@
     <div id="messageSend" class="modal">
        
         <header class="bar bar-nav">
-            <span class="icon icon-left-nav pull-left" href="#messageList">Back</span>
+            <span id="backBtn" class="icon icon-left-nav pull-left">Back</span>
             <!--               
                 <a id="sendBtn" class="icon icon-compose pull-right" href="#messageSend"></a>-->
             <h1 class="title">Create</h1>
@@ -114,15 +114,8 @@
                 <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+P+/HgAFhAJ/wlseKgAAAABJRU5ErkJggg=="/>
             </div>
             
-            <div id="popover" class="popover">
-               
-                <header class="bar bar-nav">
-                    <h1 class="title">Contacts</h1>
-                </header>
-                
-                <ul class="table-view">
-                    <!--<li class="table-view-cell">contact1</li>-->
-                </ul>
+            <div id="popover">
+                <select></select>
             </div>
             <div id="messageBox" class="input-row">
                 <textarea rows="5"></textarea>

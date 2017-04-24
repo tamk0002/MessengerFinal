@@ -220,13 +220,25 @@ messageList = (function(){
 createMessage = (function(){
     'use strict';
     var module = {};
+    var backBtn = null;
     
+    var clickBack = function(ev){
+        ev.preventDefault();
+        app.createMessagePage.classList.remove("active");
+    }
+
     module.makePage = function(){
         console.log('createMessage.makePage()');
         
         // switch on modal
         app.createMessagePage.classList.add("active");
-    
+
+        backBtn = document.getElementById("backBtn");
+        backBtn.addEventListener("click", clickBack);
+        
+        var popover = document.querySelector("#popover select");
+        
+        
         //"name": "listUsers",
         //"endpoint": "user-list.php",
         //"desc": "get a list of users and their ids. User must be logged in.",
@@ -244,10 +256,17 @@ createMessage = (function(){
             .then(function(data){
 
                 // this code path
-                console.log('list of users');
-                console.log(data);
+                //                console.log('list of users');
+                                console.log(data);
                 //    module.clickLg = function(ev){
                 //        ev.preventDefault();
+                var o = null;
+                data.users.forEach(user=>{
+                    o = document.createElement('option');
+                    o.textContent = user.user_name;
+                    o.value = user.user_id;
+                    popover.appendChild(o);
+                });
             
             })
             .catch(function(err){
