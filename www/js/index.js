@@ -9,6 +9,8 @@ DATE: Monday, April 24 2017
 
 var app = null;
 var loginPage = null;
+var messageList = null;
+var createMessage = null;
 
 //=========================================================
 
@@ -24,7 +26,8 @@ app = (function(){
     document.addEventListener('deviceready', onDeviceReady);    
     function onDeviceReady(ev) {
 
-        app.messageList = document.getElementById("messageList");        
+        app.messageListPage = document.getElementById("messageList");        
+        app.createMessagePage = document.getElementById("messageSend");        
         
         loginPage.makePage();
     }
@@ -85,13 +88,14 @@ loginPage = (function(){
             
                 //
                         
-                s = "code: "+data.code;
-                console.log(s);
+                //                s = "code: "+data.code;
+                //                console.log(s);
                 
                 
             })
             .catch(function(err){
-                alert(err.message);
+                console.log("fetch error");
+                console.log(err.message);
             });
     }
     
@@ -112,7 +116,8 @@ loginPage = (function(){
                 console.log(data);
             })
             .catch(function(err){
-                alert(err.message);
+                console.log('fetch error');
+                console.log(err.message);
             });
         
         
@@ -123,7 +128,7 @@ loginPage = (function(){
         unIn = document.getElementById("unIn");
         emIn = document.getElementById("emIn");
 
-        // for testing only
+        // for testing only - could be used for something like a localStorage option
         unIn.value = userName;
         emIn.value = userEmail;
         //
@@ -151,10 +156,23 @@ messageList = (function(){
     'use strict';
     var module = {};
     
+    var createBtn = null;
+    
+    var clickCreate = function(ev){
+        console.log('messageList _clickCreate()');
+        
+        ev.preventDefault();
+        createMessage.makePage();
+    }
+    
     module.makePage = function(){
+        console.log('messageList.makePage()');
         
         // switch on modal
-        app.messageList.classList.add("active");
+        app.messageListPage.classList.add("active");
+        
+        createBtn = document.getElementById("createBtn");
+        createBtn.addEventListener("click", clickCreate);
         
         //"name": "listMessages",
         //"endpoint": "msg-list.php",
@@ -181,7 +199,94 @@ messageList = (function(){
             
             })
             .catch(function(err){
-                alert(err.message);
+                console.log('fetch error');
+                console.log(err.message);
+            
+            });
+
+    }
+
+    return module;
+})();
+
+
+
+
+
+
+
+//=========================================================
+
+createMessage = (function(){
+    'use strict';
+    var module = {};
+    
+    module.makePage = function(){
+        console.log('createMessage.makePage()');
+        
+        // switch on modal
+        app.createMessagePage.classList.add("active");
+    
+        //"name": "listUsers",
+        //"endpoint": "user-list.php",
+        //"desc": "get a list of users and their ids. User must be logged in.",
+        //"requires": ["user_id", "user_guid"]
+        
+        var url = "http://griffis.edumedia.ca/mad9022/steg/user-list.php";
+        var formData = new FormData();
+        formData.append("user_id", app.user_id);
+        formData.append("user_guid", app.user_guid);
+        var request = new Request(url, {method: "POST", mode: "cors", body: formData,});
+        fetch(request)
+            .then(function(response){
+                return response.json();
+            })
+            .then(function(data){
+
+                // this code path
+                console.log('list of users');
+                console.log(data);
+                //    module.clickLg = function(ev){
+                //        ev.preventDefault();
+            
+            })
+            .catch(function(err){
+                console.log('fetch error');
+                console.log(err.message);
+            
+            });
+    }
+    
+    var sendMessages = function(ev){
+        
+        //"name": "sendMessages",
+        //"endpoint": "msg-send.php",
+        //"desc": "upload an image to send to a user. User must be logged in. The image field must be a file.",
+        //"requires": ["user_id", "user_guid", "recipient_id", "image"]
+        
+        var url = "http://griffis.edumedia.ca/mad9022/steg/msg-send.php";
+        var formData = new FormData();
+
+        formData.append("user_id", app.user_id);
+        formData.append("user_guid", app.user_guid);
+
+        var request = new Request(url, {method: "POST", mode: "cors", body: formData,});
+        fetch(request)
+            .then(function(response){
+                return response.json();
+            })
+            .then(function(data){
+
+                // this code path
+                console.log(data);
+                //    module.clickLg = function(ev){
+                //        ev.preventDefault();
+            
+            })
+            .catch(function(err){
+                console.log('fetch error');
+                console.log(err.message);
+            
             });
 
     }
