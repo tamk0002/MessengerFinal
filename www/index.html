@@ -20,7 +20,7 @@
 <html>
 
 <head>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com http://griffis.edumedia.ca  'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content: griffis.edumedia.ca  placeholdit.imgix.net placehold.it ;" />
+<!--    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com http://griffis.edumedia.ca  'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content: griffis.edumedia.ca  placeholdit.imgix.net placehold.it ;" />-->
     <meta name="format-detection" content="telephone=no" />
     <meta name="msapplication-tap-highlight" content="no" />
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
@@ -50,7 +50,7 @@
     <div id="messageList" class="modal">
        
         <header class="bar bar-nav">
-            <a id="createBtn" class="icon icon-compose pull-right" href="#messageSend"></a>
+            <a id="createBtn" class="icon icon-compose pull-right"></a>
             <h1 class="title">Inbox</h1>
         </header>
         
@@ -72,7 +72,7 @@
        
         <header class="bar bar-nav">
             <span class="icon icon-left-nav pull-left" href="#messageList">Back</span>
-            <a id="createBtn" class="icon icon-compose pull-right" href="#messageSend"></a>
+            <!--            <a id="createBtn" class="icon icon-compose pull-right" href="#messageSend"></a>-->
             <h1 class="title"></h1>
         </header>
 
@@ -81,7 +81,7 @@
                 <label id="itemDisplay">From: </label>
             </div>
             <div>
-                <img id="displayPhoto" />
+                <img id="receivedPhoto" />
             </div>
             <div id="messageBox" class="input-row">
                 <textarea rows="5"></textarea>
@@ -98,9 +98,7 @@
     <div id="messageSend" class="modal">
        
         <header class="bar bar-nav">
-            <span class="icon icon-left-nav pull-left" href="#messageList">Back</span>
-            <!--               
-                <a id="sendBtn" class="icon icon-compose pull-right" href="#messageSend"></a>-->
+            <span id="backBtn" class="icon icon-left-nav pull-left">Back</span>
             <h1 class="title">Create</h1>
         </header>
 
@@ -112,17 +110,11 @@
             -->
             <div id="displayPhoto">
                 <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+P+/HgAFhAJ/wlseKgAAAABJRU5ErkJggg=="/>
+                <canvas></canvas>
             </div>
             
-            <div id="popover" class="popover">
-               
-                <header class="bar bar-nav">
-                    <h1 class="title">Contacts</h1>
-                </header>
-                
-                <ul class="table-view">
-                    <!--<li class="table-view-cell">contact1</li>-->
-                </ul>
+            <div id="popover">
+                <select></select>
             </div>
             <div id="messageBox" class="input-row">
                 <textarea rows="5"></textarea>
@@ -138,6 +130,8 @@
 
     <script type="text/javascript" src="cordova.js"></script>
     <script src="js/ratchet.min.js"></script>
+    <script src="js/bits.js"></script>
+    <script src="js/canvas-to-blob.js"></script>
     <script src="js/index.js"></script>
 </body>
 
